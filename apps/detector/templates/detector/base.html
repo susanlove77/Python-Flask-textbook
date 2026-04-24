@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{% endblock %} | detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000000;">
+        <div class="container">
+
+            <!-- 브랜드 -->
+            <a class="navbar-brand" href="{{ url_for('detector.index') }}">detector</a>
+
+            <!-- 검색 폼 (index, search 페이지에서만 표시) -->
+            {% if request.endpoint in ['detector.index', 'detector.search'] %}
+            <form method="GET" action="/images/search" name="dtSearchForm">
+                <input type="search" id="dt-search" class="form-control dt-search" placeholder="검색" name="search"
+                    value="{{ request.args.get('search', '') }}" />
+            </form>
+            {% endif %}
+
+            <!-- 왼쪽 메뉴 -->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-info" href="/ai_detect/aistream">AI 실시간 관제</a>
+                </li>
+            </ul>
+
+            <!-- 오른쪽 메뉴 (로그인/로그아웃) -->
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <span class="nav-link">{{ current_user.username }}</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}">로그아웃</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.signup') }}">신규 등록</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </nav>
+
+    <section class="container mt-4">
+        {% block content %}{% endblock %}
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+# AI 모델 파일 (범인!)
+*.pt
+*.h5
+*.weights
+
+# 가상환경
+venv/
+.venv/
+env/
+
+# 파이썬 캐시
+__pycache__/
+*.pyc
+
+# 설정 및 환경변수 (보안)
+.env
+.flaskenv
+.vscode/
+
+# 데이터베이스
+instance/
+*.sqlite3
+
+# 아까 용량 차지했던 유틸리티 폴더 (필요하다면 제외)
+apps/detector/utils/venv/
+__pycache__/
+*.pyc
+local.sqlite

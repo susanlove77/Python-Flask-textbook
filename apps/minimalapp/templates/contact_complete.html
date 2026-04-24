@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>문의 완료</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+    <h2>문의 완료</h2>
+
+    {# 1. 서버에서 보낸 메시지가 있을 때만 상자를 보여줍니다 #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul style="border: 2px solid black; color: black; padding: 15px 15px 15px 40px; list-style: disc;">
+                {% for message in messages %}
+                    <li style="font-weight: bold;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            {# 2. 새로고침을 해서 메시지가 사라졌을 때 보여줄 기본 문구입니다 #}
+            <div>
+                <ul>
+                    <li style="list-style: disc;">정상적으로 접수되었습니다.</li>
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <p><a href="{{ url_for('endpoint-name') }}">홈으로 돌아가기</a></p>
+</body>
+</html>

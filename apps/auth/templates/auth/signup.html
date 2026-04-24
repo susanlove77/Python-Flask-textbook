@@ -1,0 +1,43 @@
+{% extends "detector/base.html" %}
+
+{% block title %}사용자 신규 등록{% endblock %}
+
+{% block content %}
+<div class="mx-auto dt-auth-main">
+    <div class="card dt-auth-signup">
+        <header>사용자 신규 등록</header>
+        <section>
+            <form method="post" action="{{ url_for('auth.signup', next=request.args.get('next')) }}" class="form-signin" novalidate>
+                {{ form.csrf_token }}
+
+                {% for message in get_flashed_messages() %}
+                <div class="dt-auth-flash" style="color: red; margin-bottom: 10px;">{{ message }}</div>
+                {% endfor %}
+
+                <div class="form-group">
+                    {{ form.username(size=30, class="form-control dt-auth-input", placeholder="사용자명") }}
+                    {% for error in form.username.errors %}
+                    <span style="color: red; font-size: 12px;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email(class="form-control dt-auth-input", placeholder="메일 주소") }}
+                    {% for error in form.email.errors %}
+                    <span style="color: red; font-size: 12px;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password(class="form-control dt-auth-input", placeholder="비밀번호") }}
+                    {% for error in form.password.errors %}
+                    <span style="color: red; font-size: 12px;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                {{ form.submit(class="btn btn-md btn-primary btn-block dt-auth-btn") }}
+            </form>
+        </section>
+    </div>
+</div>
+{% endblock %}

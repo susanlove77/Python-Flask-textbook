@@ -1,0 +1,85 @@
+{% extends "detector/base.html" %}
+
+{% block title %}AI 실시간 관제{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-12 mb-3">
+        <h3 class="border-bottom pb-2">실시간 AI 객체 탐지 (YOLOv8)</h3>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">CAM 01 (192.168.0.38)</h5>
+            </div>
+            <div class="card-body p-0 bg-light d-flex align-items-center justify-content-center"
+                style="min-height: 300px;">
+                <img id="img_cam1" src="" class="img-fluid" alt="연결 대기 중...">
+            </div>
+            <div class="card-footer text-muted small">
+                Status: <span id="status_cam1" class="text-danger">Connecting...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">CAM 02 (192.168.0.43)</h5>
+            </div>
+            <div class="card-body p-0 bg-light d-flex align-items-center justify-content-center"
+                style="min-height: 300px;">
+                <img id="img_cam2" src="" class="img-fluid" alt="연결 대기 중...">
+            </div>
+            <div class="card-footer text-muted small">
+                Status: <span id="status_cam2" class="text-danger">Connecting...</span>
+            </div>
+        </div>
+    </div>
+    <!--ipCam이 3개면 잘 안돌아감 2개 MAX-->
+    <!-- <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">CAM 01 (192.168.0.48)</h5>
+            </div>
+            <div class="card-body p-0 bg-light d-flex align-items-center justify-content-center"
+                style="min-height: 300px;">
+                <img id="img_cam1" src="" class="img-fluid" alt="연결 대기 중...">
+            </div>
+            <div class="card-footer text-muted small">
+                Status: <span id="status_cam1" class="text-danger">Connecting...</span>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+    // 1. 소켓 연결 (서버 주소에 맞춰 자동으로 연결됨)
+    const socket = io();
+
+    // 2. CAM 01 데이터 수신
+    socket.on('video_frame_cam1', function (data) {
+        const img = document.getElementById('img_cam1');
+        const status = document.getElementById('status_cam1');
+        img.src = 'data:image/jpeg;base64,' + data.image;
+        status.innerText = "Streaming";
+        status.className = "text-success fw-bold";
+    });
+
+    // 3. CAM 02 데이터 수신 (이게 있어야 두 번째 캠이 뜹니다!)
+    socket.on('video_frame_cam2', function (data) {
+        const img = document.getElementById('img_cam2');
+        const status = document.getElementById('status_cam2');
+        img.src = 'data:image/jpeg;base64,' + data.image;
+        status.innerText = "Streaming";
+        status.className = "text-success fw-bold";
+    });
+
+    // 연결 에러 핸들링
+    socket.on('connect_error', (error) => {
+        console.error('Socket Connection Error:', error);
+    });
+</script>
+{% endblock %}
